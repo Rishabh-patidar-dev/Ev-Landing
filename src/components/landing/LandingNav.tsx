@@ -58,7 +58,7 @@ export function LandingNav() {
             Sign in
           </Link>
           <Link
-            href="/signup"
+            href="/apply"
             className="rounded-md bg-stone px-4 py-2 text-sm font-semibold text-ink transition-colors hover:bg-[#00807D]"
           >
             Apply now
@@ -95,7 +95,7 @@ export function LandingNav() {
                 Sign in
               </Link>
               <Link
-                href="/signup"
+                href="/apply"
                 className="flex-1 rounded-md bg-stone px-4 py-2.5 text-center text-sm font-semibold text-ink"
               >
                 Apply now

@@ -7,7 +7,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Create your account — Voltmark Dealers',
-  description: 'Create an account to apply for a Voltmark EV dealership.',
+  description: 'Create an account to track your Voltmark EV dealership application stage by stage.',
 }
 
 const points = [
@@ -19,7 +19,6 @@ const points = [
 export default function SignupPage() {
   return (
     <div className="flex min-h-screen">
-      {/* Brand panel */}
       <div className="hidden flex-col justify-between border-r border-ink/[0.07] bg-sand/10 p-12 lg:flex lg:w-1/2">
         <Link href="/" className="flex items-center gap-2.5">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-stone/25">
@@ -32,10 +31,11 @@ export default function SignupPage() {
 
         <div className="space-y-6">
           <h1 className="text-4xl font-semibold leading-tight text-ink">
-            Start your dealership application
+            Track your dealership application
           </h1>
           <p className="max-w-sm text-sm leading-relaxed text-ink/60">
-            One account carries you through the entire onboarding — from KYC to go-live.
+            One account carries you through all 5 stages — from KYC to go-live —
+            with document upload at each step.
           </p>
           <ul className="space-y-3">
             {points.map((p) => (
@@ -52,7 +52,6 @@ export default function SignupPage() {
         <p className="font-mono text-xs text-ink/35">© 2026 Voltmark</p>
       </div>
 
-      {/* Form panel */}
       <div className="flex flex-1 items-center justify-center bg-brand-white p-8">
         <div className="w-full max-w-sm">
           <div className="mb-8 flex items-center gap-2 lg:hidden">

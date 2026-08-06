@@ -3,12 +3,12 @@ import { z } from 'zod'
 import { sendToCrm } from '@/lib/crm/ingest'
 
 // A lightweight "talk to us" form. Routes to the CRM Leads module as a
-// retail_inquiry (Lead + Enquiry + lead scoring). Deliberately low-friction:
-// name + email required, everything else optional.
+// retail_inquiry (Lead + Enquiry + lead scoring). Format validation is
+// intentionally off (client demo) — just needs a name and an email.
 const enquirySchema = z.object({
-  name: z.string().min(2, 'Enter your name'),
-  email: z.string().email('Enter a valid email'),
-  phone: z.string().regex(/^[6-9]\d{9}$/, 'Enter a valid 10-digit mobile number').optional().or(z.literal('')),
+  name: z.string().min(1, 'Enter your name'),
+  email: z.string().min(1, 'Enter an email'),
+  phone: z.string().optional().or(z.literal('')),
   company: z.string().optional(),
   city: z.string().optional(),
   state: z.string().optional(),

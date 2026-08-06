@@ -1,37 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// Cheap, edge-safe gate: only checks the session cookie is present, not that
-// it's still valid — real verification (src/lib/auth/session.ts#getSession)
-// happens server-side in each protected layout/route, which is also where
-// role-based redirects (dealer vs OEM admin) live.
-const SESSION_COOKIE = 'portal_session'
+// Cheap, edge-safe gate: only checks the CRM's dealer_session cookie is
+// present (it's a host-only "localhost" cookie, so the browser sends it to
+// this app on :3001 too, even though the CRM API that issued it is on
+// :4000). Real verification happens on every CRM API call this app makes —
+// this middleware just avoids flashing the dashboard shell before redirecting.
+const SESSION_COOKIE = 'dealer_session'
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const hasSession = request.cookies.has(SESSION_COOKIE)
 
-  // Public marketing site + application intake: the homepage, the apply
-  // wizard, and account creation must be reachable by anonymous visitors —
-  // that's the whole point of the landing page. Everything else (dealer
-  // dashboard, OEM dashboard, stage/onboarding APIs) stays behind login.
-  const publicExact = pathname === '/' || pathname === '/apply' || pathname === '/signup'
-  const isPublicRoute =
-    publicExact ||
-    pathname.startsWith('/login') ||
-    pathname.startsWith('/register') ||
-    pathname.startsWith('/auth') ||
-    pathname.startsWith('/api/leads') ||
-    pathname.startsWith('/api/apply') ||
-    pathname.startsWith('/api/enquiry') ||
-    pathname.startsWith('/api/auth')
-
-  if (!hasSession && !isPublicRoute) {
+  if (pathname === '/dashboard' && !hasSession) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
-  if (hasSession && (pathname === '/login' || pathname === '/register' || pathname === '/signup')) {
+  if ((pathname === '/login' || pathname === '/signup') && hasSession) {
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
     return NextResponse.redirect(url)
@@ -41,5 +27,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
+  matcher: ['/dashboard', '/login', '/signup'],
 }

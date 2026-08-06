@@ -39,7 +39,7 @@ export function Hero() {
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
-              href="/signup"
+              href="/apply"
               className="inline-flex items-center justify-center gap-2 rounded-md bg-stone px-6 py-3.5 text-base font-semibold text-ink transition-colors hover:bg-[#00807D]"
             >
               Start your application <ArrowRight className="h-4 w-4" />

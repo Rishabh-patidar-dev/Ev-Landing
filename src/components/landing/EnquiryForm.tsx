@@ -2,22 +2,12 @@
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { User, Mail, Phone, Building2, CheckCircle2 } from 'lucide-react'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 
-const schema = z.object({
-  name: z.string().min(2, 'Enter your name'),
-  email: z.string().email('Enter a valid email'),
-  phone: z.string().regex(/^[6-9]\d{9}$/, 'Enter a valid 10-digit mobile').optional().or(z.literal('')),
-  company: z.string().optional(),
-  city: z.string().optional(),
-  message: z.string().optional(),
-})
-
-type Data = z.infer<typeof schema>
+// Validation is intentionally off (client demo) — no resolver.
+type Data = { name: string; email: string; phone?: string; company?: string; city?: string; message?: string }
 
 function getUtm() {
   if (typeof window === 'undefined') return {}
@@ -32,9 +22,7 @@ function getUtm() {
 export function EnquiryForm() {
   const [done, setDone] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null)
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<Data>({
-    resolver: zodResolver(schema),
-  })
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<Data>()
 
   const onSubmit = async (data: Data) => {
     setServerError(null)
@@ -73,10 +61,10 @@ export function EnquiryForm() {
           </p>
           <p className="mt-6 font-mono text-xs text-ink/40">
             Prefer to dive in? You can{' '}
-            <a href="/signup" className="text-slate underline">
-              create an account
+            <a href="/apply" className="text-slate underline">
+              apply directly
             </a>{' '}
-            and apply directly.
+            — no account needed.
           </p>
         </div>
 

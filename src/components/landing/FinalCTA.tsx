@@ -14,21 +14,15 @@ export function FinalCTA() {
           Ready to put your name on the network?
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-base text-ink/60">
-          Create your account and start Stage 1 today. It takes a few minutes, and
-          you’ll always see exactly what’s next.
+          Apply and start Stage 1 today. It takes a few minutes, and you can
+          attach documents right away or add them later.
         </p>
-        <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+        <div className="mt-8 flex justify-center">
           <Link
-            href="/signup"
+            href="/apply"
             className="inline-flex items-center justify-center gap-2 rounded-md bg-stone px-7 py-3.5 text-base font-semibold text-ink transition-colors hover:bg-[#00807D]"
           >
-            Create your account <ArrowRight className="h-4 w-4" />
-          </Link>
-          <Link
-            href="/login"
-            className="inline-flex items-center justify-center rounded-md border border-ink/15 px-7 py-3.5 text-base font-medium text-ink transition-colors hover:border-ink/30"
-          >
-            Sign in
+            Start your application <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </div>
@@ -52,7 +46,7 @@ export function LandingFooter() {
           <a href="#process" className="hover:text-ink">How it works</a>
           <a href="#requirements" className="hover:text-ink">Requirements</a>
           <a href="#faq" className="hover:text-ink">FAQ</a>
-          <Link href="/login" className="hover:text-ink">Sign in</Link>
+          <Link href="/apply" className="hover:text-ink">Apply</Link>
         </div>
         <p className="font-mono text-xs text-ink/40">© 2026 Voltmark</p>
       </div>

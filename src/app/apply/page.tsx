@@ -23,9 +23,6 @@ export default function ApplyPage() {
               Voltmark <span className="text-slate">Dealers</span>
             </span>
           </Link>
-          <Link href="/login" className="text-sm text-ink/60 hover:text-ink">
-            Sign in
-          </Link>
         </div>
       </header>
 

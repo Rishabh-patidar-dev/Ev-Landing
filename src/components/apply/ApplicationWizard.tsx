@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import {
   Building2, User, Mail, Phone, MapPin, CheckCircle2, ArrowRight, ArrowLeft,
@@ -9,8 +9,8 @@ import {
 import { Input } from '@/components/ui/Input'
 import { Select } from '@/components/ui/Select'
 import { Button } from '@/components/ui/Button'
-import { validateGSTIN, formatGSTIN } from '@/lib/validators/gstin'
-import { validatePAN, formatPAN } from '@/lib/validators/pan'
+import { formatGSTIN } from '@/lib/validators/gstin'
+import { formatPAN } from '@/lib/validators/pan'
 import { APPLICATION_DOCS } from '@/lib/content/onboarding'
 
 type Uploaded = { docKey: string; label: string; path: string; url?: string }
@@ -50,60 +50,32 @@ export function ApplicationWizard() {
   const [step, setStep] = useState(0)
   const [form, setForm] = useState<Form>(empty)
   const [errors, setErrors] = useState<Partial<Record<keyof Form, string>>>({})
-  const [uid, setUid] = useState<string | null>(null)
+  // Namespaces this browser's uploaded files on the server — no account or
+  // sign-in involved, just a fresh random id per visit to the apply page.
+  const [sessionId] = useState(() => crypto.randomUUID())
   const [uploads, setUploads] = useState<Uploaded[]>([])
   const [uploadingKey, setUploadingKey] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null)
-  const [result, setResult] = useState<{ publicId: string | null; message: string } | null>(null)
-
-  // Prefill name from the signed-in account if present.
-  useEffect(() => {
-    fetch('/api/auth/me')
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.ok && data.user) {
-          setUid(data.user.id)
-          setForm((f) => ({ ...f, contactName: f.contactName || data.user.fullName || '' }))
-        }
-      })
-      .catch(() => {})
-  }, [])
+  const [result, setResult] = useState<{ publicId: string | null; message: string; duplicate: boolean } | null>(null)
 
   const set = (k: keyof Form, v: string) => {
     setForm((f) => ({ ...f, [k]: v }))
     setErrors((e) => ({ ...e, [k]: undefined }))
   }
 
-  function validateStep(s: number): boolean {
-    const e: Partial<Record<keyof Form, string>> = {}
-    if (s === 0) {
-      if (form.contactName.trim().length < 2) e.contactName = 'Enter the primary contact name'
-      if (form.legalName.trim().length < 2) e.legalName = 'Enter your registered business name'
-      if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = 'Enter a valid email'
-      if (!/^[6-9]\d{9}$/.test(form.phone)) e.phone = 'Enter a valid 10-digit mobile'
-    }
-    if (s === 1) {
-      if (form.gstin && !validateGSTIN(form.gstin)) e.gstin = 'Check the 15-character GSTIN'
-      if (form.pan && !validatePAN(form.pan)) e.pan = 'Invalid PAN format'
-      if (form.pincode && !/^\d{6}$/.test(form.pincode)) e.pincode = 'Enter a 6-digit pincode'
-    }
-    setErrors(e)
-    return Object.keys(e).length === 0
-  }
-
-  const next = () => {
-    if (validateStep(step)) setStep((s) => Math.min(s + 1, STEPS.length - 1))
-  }
+  // Validation is intentionally off — client demo flow, nothing should
+  // block moving through the wizard regardless of what's typed.
+  const next = () => setStep((s) => Math.min(s + 1, STEPS.length - 1))
   const back = () => setStep((s) => Math.max(s - 1, 0))
 
   async function handleUpload(docKey: string, label: string, file: File) {
-    if (!uid) return
     setUploadingKey(docKey)
     try {
       const body = new FormData()
       body.append('file', file)
       body.append('docKey', docKey)
+      body.append('sessionId', sessionId)
       const res = await fetch('/api/apply/upload', { method: 'POST', body })
       const data = await res.json()
       if (!res.ok || !data.ok) throw new Error(data.error || 'Upload failed')
@@ -134,7 +106,7 @@ export function ApplicationWizard() {
         )
         return
       }
-      setResult({ publicId: data.publicId ?? null, message: data.message })
+      setResult({ publicId: data.publicId ?? null, message: data.message, duplicate: Boolean(data.duplicate) })
     } catch {
       setServerError('Network error. Please try again.')
     } finally {
@@ -149,8 +121,15 @@ export function ApplicationWizard() {
         <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate/10">
           <CheckCircle2 className="h-8 w-8 text-slate" />
         </span>
-        <h2 className="mt-5 text-2xl font-semibold text-ink">Application submitted</h2>
+        <h2 className="mt-5 text-2xl font-semibold text-ink">
+          {result.duplicate ? 'Matched an existing application' : 'Application submitted'}
+        </h2>
         <p className="mt-2 text-sm text-ink/60">{result.message}</p>
+        {result.duplicate && (
+          <p className="mt-2 font-mono text-xs uppercase tracking-wide text-slate">
+            No new application was created — this email is already in progress
+          </p>
+        )}
         {result.publicId && (
           <p className="mt-4 rounded-lg bg-sand/15 px-4 py-3 font-mono text-sm text-ink">
             Reference: <span className="font-semibold">{result.publicId}</span>
@@ -262,12 +241,6 @@ export function ApplicationWizard() {
               Optional — attach anything you have ready. The rest is requested stage by
               stage, so you can submit without uploading now.
             </p>
-            {!uid && (
-              <div className="rounded-lg border border-stone/40 bg-stone/[0.12] px-4 py-3 text-sm text-ink/70">
-                <Link href="/login" className="font-medium text-slate underline">Sign in</Link>{' '}
-                to attach documents securely. You can still submit the application without them.
-              </div>
-            )}
             <div className="space-y-2.5">
               {APPLICATION_DOCS.map((doc) => {
                 const done = uploads.find((u) => u.docKey === doc.docKey)
@@ -285,13 +258,10 @@ export function ApplicationWizard() {
                         <FileCheck2 className="h-3.5 w-3.5" /> Attached <X className="h-3 w-3" />
                       </button>
                     ) : (
-                      <label className={[
-                        'flex cursor-pointer items-center gap-1.5 rounded-md border border-ink/12 px-3 py-1.5 text-xs font-medium text-ink/60 hover:border-ink/30',
-                        !uid ? 'pointer-events-none opacity-40' : '',
-                      ].join(' ')}>
+                      <label className="flex cursor-pointer items-center gap-1.5 rounded-md border border-ink/12 px-3 py-1.5 text-xs font-medium text-ink/60 hover:border-ink/30">
                         {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <UploadCloud className="h-3.5 w-3.5" />}
                         {busy ? 'Uploading' : 'Upload'}
-                        <input type="file" className="hidden" disabled={!uid || busy}
+                        <input type="file" className="hidden" disabled={busy}
                           accept="image/*,application/pdf"
                           onChange={(e) => e.target.files?.[0] && handleUpload(doc.docKey, doc.label, e.target.files[0])} />
                       </label>

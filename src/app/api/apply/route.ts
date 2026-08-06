@@ -2,21 +2,21 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { sendToCrm } from '@/lib/crm/ingest'
 
-// Matches the fields the CRM's extractApplicant() understands. Only legalName
-// (or contactName) + email are strictly required by the CRM; everything else
-// enriches the application. We validate the applicant-facing fields here so we
-// can show friendly errors before the round-trip.
+// Format validation is intentionally off (client demo) — only the bare
+// minimum the CRM itself requires (a non-empty applicant name and email)
+// stays, so the round-trip has something to work with. Everything else
+// passes through as typed, no matter the format.
 const applySchema = z.object({
-  contactName: z.string().min(2, 'Enter the primary contact name'),
-  legalName: z.string().min(2, 'Enter your registered business name'),
+  contactName: z.string().min(1, 'Enter the primary contact name'),
+  legalName: z.string().min(1, 'Enter your registered business name'),
   tradeName: z.string().optional(),
-  email: z.string().email('Enter a valid email'),
-  phone: z.string().regex(/^[6-9]\d{9}$/, 'Enter a valid 10-digit mobile number'),
+  email: z.string().min(1, 'Enter an email'),
+  phone: z.string().optional().or(z.literal('')),
   gstin: z.string().optional(),
   pan: z.string().optional(),
   city: z.string().optional(),
   state: z.string().optional(),
-  pincode: z.string().regex(/^\d{6}$/, 'Enter a valid 6-digit pincode').optional().or(z.literal('')),
+  pincode: z.string().optional().or(z.literal('')),
   investmentCapacity: z.string().optional(),
   // File paths already uploaded to Supabase storage (optional). Stored on the
   // CRM side inside rawPayload so the network team can pull them.
