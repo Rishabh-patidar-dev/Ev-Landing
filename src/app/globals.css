@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Palette — deep indigo + teal, modern SaaS register (inspired by the
+   Synkro brand board: 60% white/light neutral, 30% deep indigo, 10% teal
+   accent). Token NAMES kept the same as the old muted earth palette
+   (ink/slate/stone/sand) on purpose — every component already reads colour
+   through these four variables, so swapping the values re-themes the whole
+   site without touching a single component file.
+   --------------------------------------------------------------------------- */
+:root {
+  --ink: #0F1B3D;    /* Deep Indigo — headings, dark surfaces, primary text */
+  --slate: #0B7A78;  /* Deepened teal — links, icon glyphs, small accent text (AA on white; pure #009D9A reads ~3.3:1, too low for body-sized text) */
+  --stone: #009D9A;  /* Teal — primary buttons, badges, large accents */
+  --sand: #64748B;   /* Stone Grey — secondary/muted text, borders, tints */
+  --ink2: #0A1330;   /* Deeper indigo — darkest surfaces */
+  --white: #F7FAFC;  /* Soft White — page background */
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-slate: var(--slate);
+  --color-stone: var(--stone);
+  --color-sand: var(--sand);
+  --color-ink2: var(--ink2);
+  --color-brand-white: var(--white);
+  --color-background: var(--ink2);
+  --color-foreground: var(--white);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display), var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--sand); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--slate); }
+
+/* Current-stage highlight — a static ring, not a continuous animation
+   (kept deliberately still: "simple, fast, practical", no motion that
+   never resolves). */
+.stage-pulse { box-shadow: 0 0 0 3px color-mix(in srgb, var(--stone) 30%, transparent); }
+
+/* Verification spinner */
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.spin-slow { animation: spin-slow 2s linear infinite; }
+
+/* Landing reveal on load */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal { animation: reveal-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.reveal-delay { animation-delay: 0.15s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-delay { animation: none !important; }
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--sand) 25%, color-mix(in srgb, var(--sand) 60%, var(--white)) 50%, var(--sand) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}

@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Login identity for the portal (dealer self-service + OEM staff). Deliberately
+// separate from Dealer — a fresh signup exists before the fuller Dealer
+// profile (GSTIN, PAN, entity name...) is captured, exactly mirroring how
+// this table's predecessor (Supabase Auth's auth.users) related to Dealer.
+model Account {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  // Nullable: /api/leads (the old lead-capture form) creates an Account to
+  // link a Dealer to before a password exists — that account can't log in
+  // until a password is set. No such flow exists yet (was Supabase's
+  // forgot-password before); logging in cleanly rejects it as invalid.
+  passwordHash String?
+  fullName     String
+  role         String   @default("dealer") // "dealer" | "oem_admin" | "super_admin"
+  createdAt    DateTime @default(now())
+}
+
+model Dealer {
+  id           String   @id @default(uuid())
+  authId       String?  @unique // Account.id once linked — no formal FK so a Dealer can pre-date its Account (see /api/leads)
+  gstIn        String   @unique
+  pan          String
+  entityName   String
+  promoterName String
+  email        String   @unique
+  mobile       String
+  cityTier     String
+  oemId          String?
+  netWorthRange  String?
+  currentStage   Int      @default(1)
+  status       String   @default("pending")
+  leadScore    Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  documents    Document[]
+  stageHistory StageTransaction[]
+  siteData     SiteAssessment?
+  contracts    Contract[]
+  staffMembers StaffMember[]
+  oem          OEM?              @relation(fields: [oemId], references: [id])
+}
+
+model Document {
+  id            String   @id @default(uuid())
+  dealerId      String
+  stage         Int
+  docType       String
+  storagePath   String?
+  verifyApi     String?
+  verifyStatus  String   @default("pending")
+  verifyPayload Json?
+  uploadedAt    DateTime @default(now())
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@unique([dealerId, stage, docType])
+}
+
+model StageTransaction {
+  id          String   @id @default(uuid())
+  dealerId    String
+  stage       Int
+  action      String
+  triggeredBy String
+  reason      String?
+  createdAt   DateTime @default(now())
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+}
+
+model SiteAssessment {
+  id            String  @id @default(uuid())
+  dealerId      String  @unique
+  lat           Float?
+  lng           Float?
+  addressLine   String?
+  leaseDuration Int?
+  showroomSqft  Int?
+  workshopBays  Int?
+  oemApproved   Boolean @default(false)
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+}
+
+model Contract {
+  id           String    @id @default(uuid())
+  dealerId     String
+  contractType String
+  signStatus   String    @default("pending")
+  esignRef     String?
+  signedAt     DateTime?
+  franchiseFee Int?
+  deposit      Int?
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+}
+
+model StaffMember {
+  id         String  @id @default(uuid())
+  dealerId   String
+  name       String
+  role       String
+  employeeId String
+  lmsCourses Json?
+  certified  Boolean @default(false)
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+}
+
+model OEM {
+  id           String   @id @default(uuid())
+  name         String
+  logoUrl      String?
+  minNetWorth  Int
+  franchiseFee Int
+  deposit      Int
+  dealers      Dealer[]
+}
