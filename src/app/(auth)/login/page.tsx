@@ -29,6 +29,11 @@ export default function LoginPage() {
           </div>
         </div>
 
+        <div className="flex items-center gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/innovun-dark.png" alt="Innovun" className="h-4 w-auto opacity-70" />
+          <p className="text-ink/40 text-xs">Powered By Innovun Global</p>
+        </div>
         <p className="text-ink/35 text-xs">© 2026 Voltmark</p>
       </div>
 
