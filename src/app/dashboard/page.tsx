@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import {
   Zap, LogOut, Check, Lock, Loader2, UploadCloud, Eye, Clock, Building2, IndianRupee, AlertTriangle, ScanText,
 } from 'lucide-react'
-import { crmFetch } from '@/lib/crm/dealerAuth'
+import { crmFetch, clearStoredToken } from '@/lib/crm/dealerAuth'
 
 const STAGE_ORDER = ['APPLICATION', 'SCREENING_NDA', 'BUSINESS_PROPOSAL', 'DUE_DILIGENCE', 'LEGAL_AGREEMENT'] as const
 
@@ -52,6 +52,7 @@ export default function DashboardPage() {
   const load = useCallback(async () => {
     const { ok, data } = await crmFetch('/api/v1/dealer-auth/application')
     if (!ok || !data.ok) {
+      clearStoredToken()
       router.push('/login')
       return
     }
@@ -89,6 +90,7 @@ export default function DashboardPage() {
   async function handleSignOut() {
     setSigningOut(true)
     await crmFetch('/api/v1/dealer-auth/logout', { method: 'POST' })
+    clearStoredToken()
     router.push('/login')
   }
 

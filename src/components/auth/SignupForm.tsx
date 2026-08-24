@@ -5,8 +5,9 @@ import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { User, KeyRound, Lock, Mail, ArrowRight } from 'lucide-react'
 import { Input } from '@/components/ui/Input'
+import { PasswordInput } from '@/components/ui/PasswordInput'
 import { Button } from '@/components/ui/Button'
-import { crmFetch } from '@/lib/crm/dealerAuth'
+import { crmFetch, storeToken } from '@/lib/crm/dealerAuth'
 
 // Validation is intentionally off (client demo) — no resolver, so
 // react-hook-form never blocks submission on field content.
@@ -27,7 +28,7 @@ export function SignupForm() {
       setServerError(result.message || 'Could not create your account.')
       return
     }
-    // Full navigation, not router.push — see LoginForm.tsx for why.
+    if (result.token) storeToken(result.token)
     window.location.href = '/dashboard'
   }
 
@@ -40,8 +41,8 @@ export function SignupForm() {
       <Input {...register('fullName')} label="Full name" placeholder="Your name" prefix={<User className="h-4 w-4" />} error={errors.fullName?.message} required />
       <Input {...register('email')} label="Email" type="email" placeholder="you@company.com" prefix={<Mail className="h-4 w-4" />} error={errors.email?.message} required />
       <Input {...register('username')} label="Username" placeholder="Choose a username" prefix={<KeyRound className="h-4 w-4" />} error={errors.username?.message} required />
-      <Input {...register('password')} label="Password" type="password" placeholder="At least 8 characters" prefix={<Lock className="h-4 w-4" />} error={errors.password?.message} required />
-      <Input {...register('confirm')} label="Confirm password" type="password" placeholder="Re-enter your password" prefix={<Lock className="h-4 w-4" />} error={errors.confirm?.message} required />
+      <PasswordInput {...register('password')} label="Password" placeholder="At least 8 characters" prefix={<Lock className="h-4 w-4" />} error={errors.password?.message} required />
+      <PasswordInput {...register('confirm')} label="Confirm password" placeholder="Re-enter your password" prefix={<Lock className="h-4 w-4" />} error={errors.confirm?.message} required />
 
       <Button type="submit" fullWidth size="lg" loading={isSubmitting}>
         Create account <ArrowRight className="h-4 w-4" />
