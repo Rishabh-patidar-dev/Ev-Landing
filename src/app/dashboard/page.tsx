@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import {
-  Zap, LogOut, Check, Lock, Loader2, UploadCloud, Eye, Clock, Building2, IndianRupee,
+  Zap, LogOut, Check, Lock, Loader2, UploadCloud, Eye, Clock, Building2, IndianRupee, AlertTriangle, ScanText,
 } from 'lucide-react'
 import { crmFetch } from '@/lib/crm/dealerAuth'
 
@@ -25,6 +25,8 @@ type Document = {
   required: boolean
   status: 'PENDING' | 'UPLOADED' | 'VERIFIED' | 'REJECTED'
   fileUrl: string | null
+  notes: string | null
+  ocrExtractedText: string | null
 }
 
 type Application = {
@@ -35,6 +37,7 @@ type Application = {
   email: string
   stage: string
   status: string
+  rejectionReason: string | null
   documents: Document[]
 }
 
@@ -57,6 +60,14 @@ export default function DashboardPage() {
   }, [router])
 
   useEffect(() => { load() }, [load])
+
+  // Lightweight polling so a staff-side reject/hold/advance shows up here
+  // without a manual refresh — no websockets, just a periodic re-fetch of
+  // the same endpoint the initial load already uses.
+  useEffect(() => {
+    const interval = setInterval(load, 20000)
+    return () => clearInterval(interval)
+  }, [load])
 
   async function handleUpload(docKey: string, file: File) {
     setUploadingKey(docKey)
@@ -96,6 +107,8 @@ export default function DashboardPage() {
   const verifiedCount = requiredDocs.filter((d) => d.status === 'VERIFIED').length
   const allVerified = requiredDocs.length > 0 && verifiedCount === requiredDocs.length
   const isOperational = app.stage === 'OPERATIONAL'
+  const isRejected = app.status === 'REJECTED'
+  const isOnHold = app.status === 'ON_HOLD'
 
   return (
     <div className="min-h-screen bg-brand-white">
@@ -161,7 +174,16 @@ export default function DashboardPage() {
 
       {/* Stage detail */}
       <main className="mx-auto max-w-4xl px-6 py-10">
-        {isOperational ? (
+        {isRejected ? (
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center">
+            <AlertTriangle className="mx-auto h-8 w-8 text-red-500" />
+            <h1 className="mt-3 text-2xl font-semibold text-ink">Your application was not approved</h1>
+            {app.rejectionReason && (
+              <p className="mx-auto mt-3 max-w-md rounded-lg bg-white px-4 py-3 text-sm text-red-700">{app.rejectionReason}</p>
+            )}
+            <p className="mt-3 text-sm text-ink/60">If you have questions, please reach out to our Network Expansion team.</p>
+          </div>
+        ) : isOperational ? (
           <div className="rounded-2xl border border-slate/30 bg-slate/5 p-8 text-center">
             <Check className="mx-auto h-8 w-8 text-slate" />
             <h1 className="mt-3 text-2xl font-semibold text-ink">You&rsquo;re fully onboarded</h1>
@@ -169,6 +191,15 @@ export default function DashboardPage() {
           </div>
         ) : (
           <>
+            {isOnHold && (
+              <div className="mb-6 flex items-start gap-2.5 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                <div>
+                  <p className="font-medium">Your application is currently on hold.</p>
+                  {app.rejectionReason && <p className="mt-0.5 text-amber-700">{app.rejectionReason}</p>}
+                </div>
+              </div>
+            )}
             <div className="mb-6">
               <p className="font-mono text-xs uppercase tracking-wide text-ink/40">Step {currentMeta.n} of 5</p>
               <h1 className="mt-1 text-2xl font-semibold text-ink">{currentMeta.title}</h1>
@@ -220,6 +251,7 @@ export default function DashboardPage() {
 }
 
 function DocumentCard({ doc, busy, onUpload }: { doc: Document; busy: boolean; onUpload: (file: File) => void }) {
+  const [showOcr, setShowOcr] = useState(false)
   const statusStyle: Record<Document['status'], string> = {
     PENDING: 'bg-sand/20 text-ink/50',
     UPLOADED: 'bg-amber-100 text-amber-700',
@@ -239,10 +271,14 @@ function DocumentCard({ doc, busy, onUpload }: { doc: Document; busy: boolean; o
         </span>
       </div>
 
+      {doc.status === 'REJECTED' && doc.notes && (
+        <p className="mt-1.5 text-xs text-red-600">{doc.notes}</p>
+      )}
+
       <div className="mt-3">
-        {doc.status === 'VERIFIED' || doc.status === 'UPLOADED' ? (
+        {doc.status === 'VERIFIED' || doc.status === 'UPLOADED' || doc.status === 'REJECTED' ? (
           <div className="flex items-center justify-between">
-            <span className="text-xs text-ink/50">Attached</span>
+            <span className="text-xs text-ink/50">{doc.status === 'REJECTED' ? 'Please re-upload' : 'Attached'}</span>
             {doc.fileUrl && (
               <a
                 href={`${process.env.NEXT_PUBLIC_CRM_API_URL || 'http://localhost:4000'}${doc.fileUrl}`}
@@ -254,12 +290,23 @@ function DocumentCard({ doc, busy, onUpload }: { doc: Document; busy: boolean; o
               </a>
             )}
           </div>
-        ) : (
-          <label className="flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-dashed border-ink/15 py-2.5 text-xs font-medium text-ink/60 hover:border-slate/40">
+        ) : null}
+        {(doc.status === 'PENDING' || doc.status === 'REJECTED') && (
+          <label className="mt-2 flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-dashed border-ink/15 py-2.5 text-xs font-medium text-ink/60 hover:border-slate/40">
             {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <UploadCloud className="h-3.5 w-3.5" />}
             {busy ? 'Uploading…' : 'Upload'}
             <input type="file" className="hidden" disabled={busy} accept="image/*,application/pdf" onChange={(e) => e.target.files?.[0] && onUpload(e.target.files[0])} />
           </label>
+        )}
+        {doc.ocrExtractedText && (
+          <div className="mt-2">
+            <button onClick={() => setShowOcr((s) => !s)} className="flex items-center gap-1 text-[11px] font-medium text-ink/40 hover:text-ink/60">
+              <ScanText className="h-3 w-3" /> {showOcr ? 'Hide' : 'Show'} extracted text
+            </button>
+            {showOcr && (
+              <p className="mt-1.5 max-h-24 overflow-y-auto rounded-md bg-sand/10 p-2 text-[11px] text-ink/50">{doc.ocrExtractedText}</p>
+            )}
+          </div>
         )}
       </div>
     </div>

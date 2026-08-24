@@ -13,7 +13,14 @@ import { formatGSTIN } from '@/lib/validators/gstin'
 import { formatPAN } from '@/lib/validators/pan'
 import { APPLICATION_DOCS } from '@/lib/content/onboarding'
 
-type Uploaded = { docKey: string; label: string; path: string; url?: string }
+type Uploaded = {
+  docKey: string
+  label: string
+  path: string
+  url?: string
+  ocrExtractedText?: string
+  ocrStatus?: 'DONE' | 'FAILED' | 'SKIPPED'
+}
 
 type Form = {
   contactName: string
@@ -79,7 +86,10 @@ export function ApplicationWizard() {
       const res = await fetch('/api/apply/upload', { method: 'POST', body })
       const data = await res.json()
       if (!res.ok || !data.ok) throw new Error(data.error || 'Upload failed')
-      setUploads((u) => [...u.filter((x) => x.docKey !== docKey), { docKey, label, path: data.path, url: data.url }])
+      setUploads((u) => [
+        ...u.filter((x) => x.docKey !== docKey),
+        { docKey, label, path: data.path, url: data.url, ocrExtractedText: data.ocrExtractedText, ocrStatus: data.ocrStatus },
+      ])
     } catch {
       setServerError('That file could not be uploaded. Try again or continue without it.')
     } finally {

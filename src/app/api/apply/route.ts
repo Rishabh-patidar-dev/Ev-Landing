@@ -21,7 +21,16 @@ const applySchema = z.object({
   // File paths already uploaded to Supabase storage (optional). Stored on the
   // CRM side inside rawPayload so the network team can pull them.
   documents: z
-    .array(z.object({ docKey: z.string(), label: z.string(), path: z.string(), url: z.string().optional() }))
+    .array(
+      z.object({
+        docKey: z.string(),
+        label: z.string(),
+        path: z.string(),
+        url: z.string().optional(),
+        ocrExtractedText: z.string().optional(),
+        ocrStatus: z.enum(['DONE', 'FAILED', 'SKIPPED']).optional(),
+      })
+    )
     .optional(),
   // Attribution — captured from the URL by the client, passed straight through.
   utm_source: z.string().optional(),
