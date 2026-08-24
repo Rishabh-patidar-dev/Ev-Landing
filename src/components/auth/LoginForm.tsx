@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { KeyRound, Lock } from 'lucide-react'
 import { Input } from '@/components/ui/Input'
@@ -13,7 +12,6 @@ import { crmFetch } from '@/lib/crm/dealerAuth'
 type Data = { username: string; password: string }
 
 export function LoginForm() {
-  const router = useRouter()
   const [serverError, setServerError] = useState<string | null>(null)
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<Data>()
 
@@ -24,10 +22,16 @@ export function LoginForm() {
       body: JSON.stringify(data),
     })
     if (!ok || !result.ok) {
+      console.error('[LoginForm] login failed:', result)
       setServerError(result.message || 'Invalid username or password')
       return
     }
-    router.push('/dashboard')
+    // Full navigation, not router.push — the freshly-set dealer_session
+    // cookie needs to be present for /dashboard's own data fetch right
+    // after this, and a hard navigation guarantees that request happens
+    // from a clean page load rather than a client-side transition that
+    // could theoretically race with cookie commit in some browsers.
+    window.location.href = '/dashboard'
   }
 
   return (

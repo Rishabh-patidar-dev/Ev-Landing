@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { User, KeyRound, Lock, Mail, ArrowRight } from 'lucide-react'
 import { Input } from '@/components/ui/Input'
@@ -14,7 +13,6 @@ import { crmFetch } from '@/lib/crm/dealerAuth'
 type Data = { fullName: string; email: string; username: string; password: string; confirm: string }
 
 export function SignupForm() {
-  const router = useRouter()
   const [serverError, setServerError] = useState<string | null>(null)
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<Data>()
 
@@ -25,10 +23,12 @@ export function SignupForm() {
       body: JSON.stringify({ username: data.username, password: data.password, fullName: data.fullName, email: data.email }),
     })
     if (!ok || !result.ok) {
+      console.error('[SignupForm] signup failed:', result)
       setServerError(result.message || 'Could not create your account.')
       return
     }
-    router.push('/dashboard')
+    // Full navigation, not router.push — see LoginForm.tsx for why.
+    window.location.href = '/dashboard'
   }
 
   return (
