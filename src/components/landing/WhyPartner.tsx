@@ -1,4 +1,4 @@
-import { Fingerprint, MapPin, PenTool, LineChart, GraduationCap, Lock } from 'lucide-react'
+import { Fingerprint, MapPin, PenTool, LineChart, GraduationCap, Lock, ArrowUpRight } from 'lucide-react'
 
 const features = [
   {
@@ -35,25 +35,34 @@ const features = [
 
 export function WhyPartner() {
   return (
-    <section className="border-y border-ink/[0.06] bg-sand/10 py-20 sm:py-28">
+    <section className="bg-brand-white py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-5">
-        <div className="mb-14 max-w-2xl">
-          <span className="font-mono text-xs uppercase tracking-widest text-slate">
-            Why apply here
+        <div className="mb-14 max-w-2xl text-center sm:mx-auto">
+          <span className="inline-flex items-center rounded-full bg-mint px-3.5 py-1.5 font-mono text-xs font-medium tracking-widest text-slate">
+            WHY APPLY HERE
           </span>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Built to move you forward, not slow you down
           </h2>
         </div>
 
-        <div className="grid gap-px overflow-hidden rounded-2xl border border-ink/[0.08] bg-ink/[0.06] sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((f) => (
-            <div key={f.title} className="bg-brand-white p-7 transition-colors hover:bg-sand/[0.15]">
-              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate/10">
-                <f.icon className="h-5 w-5 text-slate" />
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((f, i) => (
+            <div
+              key={f.title}
+              className="group flex flex-col rounded-2xl border border-ink/[0.06] bg-brand-white p-6 transition-all hover:-translate-y-1 hover:border-stone/30 hover:shadow-[0_20px_40px_-24px_rgba(11,23,16,0.25)]"
+            >
+              <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${i % 2 === 0 ? 'bg-mint text-slate' : 'bg-ink text-stone'}`}>
+                <f.icon className="h-5 w-5" />
               </span>
               <h3 className="mt-5 text-base font-semibold text-ink">{f.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink/60">{f.body}</p>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/60">{f.body}</p>
+              <a href="#process" className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-ink">
+                Learn more
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-mint text-slate transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </span>
+              </a>
             </div>
           ))}
         </div>

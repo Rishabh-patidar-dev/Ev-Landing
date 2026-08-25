@@ -2,8 +2,9 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import {
-  Zap, LogOut, Check, Lock, Loader2, UploadCloud, Eye, Clock, Building2, IndianRupee, AlertTriangle, ScanText,
+  LogOut, Check, Lock, Loader2, UploadCloud, Eye, Clock, Building2, IndianRupee, AlertTriangle, ScanText,
 } from 'lucide-react'
 import { crmFetch, clearStoredToken } from '@/lib/crm/dealerAuth'
 
@@ -118,11 +119,11 @@ export default function DashboardPage() {
       <header className="bg-ink">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-stone">
-              <Zap className="h-4 w-4 text-ink" />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white">
+              <Image src="/luxus-green-logo.webp" alt="Luxus Green Mobility" width={20} height={20} className="object-contain" />
             </div>
             <div>
-              <p className="text-sm font-semibold leading-tight text-brand-white">EV Dealer Onboarding</p>
+              <p className="text-sm font-semibold leading-tight text-brand-white">Luxus Green Onboarding Portal</p>
               <p className="mt-0.5 text-xs leading-tight text-sand/50">{app.legalName}</p>
             </div>
           </div>

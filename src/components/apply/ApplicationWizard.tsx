@@ -308,8 +308,8 @@ export function ApplicationWizard() {
               </dl>
             </div>
             <p className="text-xs text-ink/50">
-              By submitting, your application is sent to the Voltmark Network Development
-              team and enters Stage 1. You’ll be contacted to continue verification.
+              By submitting, your application is sent to the Luxus Green Mobility Network
+              Development team and enters Stage 1. You’ll be contacted to continue verification.
             </p>
           </div>
         )}

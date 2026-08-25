@@ -33,10 +33,10 @@ export function FAQ() {
     <section id="faq" className="border-t border-ink/[0.06] bg-brand-white py-20 sm:py-28">
       <div className="mx-auto max-w-3xl px-5">
         <div className="mb-12 text-center">
-          <span className="font-mono text-xs uppercase tracking-widest text-slate">
-            Good to know
+          <span className="inline-flex items-center rounded-full bg-mint px-3.5 py-1.5 font-mono text-xs font-medium tracking-widest text-slate">
+            GOOD TO KNOW
           </span>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Questions, answered
           </h2>
         </div>
@@ -52,7 +52,7 @@ export function FAQ() {
                   aria-expanded={isOpen}
                 >
                   <span className="text-base font-medium text-ink">{f.q}</span>
-                  <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-sand/20 text-ink/60">
+                  <span className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full transition-colors ${isOpen ? 'bg-stone text-white' : 'bg-mint text-slate'}`}>
                     {isOpen ? <Minus className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
                   </span>
                 </button>

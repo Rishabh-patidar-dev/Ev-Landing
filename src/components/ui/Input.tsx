@@ -39,14 +39,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={[
-              'w-full rounded-md px-3 py-2.5 text-sm text-ink',
-              'bg-brand-white border',
-              'focus:outline-none focus:ring-2 focus:ring-slate/40',
+              // Filled, borderless by default — a flat field defined by
+              // background contrast against its card, not a near-invisible
+              // hairline border (same fix already shipped in the DMS portal).
+              'w-full rounded-xl px-3.5 py-2.5 text-sm text-ink',
+              'bg-sand/[0.07] border-2 border-transparent',
+              'focus:outline-none focus:border-stone focus:bg-white',
               'transition-colors duration-150',
-              'placeholder:text-sand/60',
-              error
-                ? 'border-red-300 bg-red-50/50 focus:ring-red-300'
-                : 'border-ink/10 focus:border-slate/40',
+              'placeholder:text-ink/35',
+              error ? 'border-red-400 bg-red-50' : '',
               prefix ? 'pl-9' : '',
               suffix ? 'pr-9' : '',
               className,

@@ -1,13 +1,14 @@
 export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
-import { Zap, Check } from 'lucide-react'
+import Image from 'next/image'
+import { Check } from 'lucide-react'
 import { SignupForm } from '@/components/auth/SignupForm'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Create your account — Voltmark Dealers',
-  description: 'Create an account to track your Voltmark EV dealership application stage by stage.',
+  title: 'Create your account — Luxus Green Onboarding Portal',
+  description: 'Create an account to track your Luxus Green Mobility dealership application stage by stage.',
 }
 
 const points = [
@@ -19,13 +20,13 @@ const points = [
 export default function SignupPage() {
   return (
     <div className="flex min-h-screen">
-      <div className="hidden flex-col justify-between border-r border-ink/[0.07] bg-sand/10 p-12 lg:flex lg:w-1/2">
+      <div className="hidden flex-col justify-between border-r border-ink/[0.07] bg-mint/50 p-12 lg:flex lg:w-1/2">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-stone/25">
-            <Zap className="h-4 w-4 text-slate" />
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white">
+            <Image src="/luxus-green-logo.webp" alt="Luxus Green Mobility" width={20} height={20} className="object-contain" />
           </span>
           <span className="text-base font-semibold text-ink">
-            Voltmark <span className="text-slate">Dealers</span>
+            Luxus Green <span className="text-slate">Onboarding Portal</span>
           </span>
         </Link>
 
@@ -49,16 +50,16 @@ export default function SignupPage() {
           </ul>
         </div>
 
-        <p className="font-mono text-xs text-ink/35">© 2026 Voltmark</p>
+        <p className="font-mono text-xs text-ink/35">© 2026 Luxus Green Mobility</p>
       </div>
 
       <div className="flex flex-1 items-center justify-center bg-brand-white p-8">
         <div className="w-full max-w-sm">
           <div className="mb-8 flex items-center gap-2 lg:hidden">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-slate/10">
-              <Zap className="h-4 w-4 text-slate" />
+            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-mint">
+              <Image src="/luxus-green-logo.webp" alt="Luxus Green Mobility" width={16} height={16} className="object-contain" />
             </span>
-            <span className="text-sm font-semibold text-ink">Voltmark Dealers</span>
+            <span className="text-sm font-semibold text-ink">Luxus Green Onboarding Portal</span>
           </div>
 
           <div className="mb-6">

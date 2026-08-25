@@ -18,14 +18,18 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Voltmark Dealers — Become an EV dealer',
+  title: 'Luxus Green Onboarding Portal — Become an EV dealer',
   description:
-    'Apply to join the Voltmark EV dealer network. A fully digital, 5-stage onboarding — KYC, financial vetting, site assessment, e-signed contracts, and training.',
+    'Apply to join the Luxus Green Mobility dealer network. A fully digital, 5-stage onboarding — KYC, financial vetting, site assessment, e-signed contracts, and training.',
 }
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={`${jakarta.variable} ${inter.variable} ${geistMono.variable} h-full antialiased`}>
+      <head>
+        {/* webp isn't a Next.js file-convention favicon extension (icon.ico/png/jpg/svg only) — linked manually, same as the DMS/CRM apps */}
+        <link rel="icon" type="image/webp" href="/luxus-green-logo.webp" />
+      </head>
       <body className="min-h-full flex flex-col bg-brand-white text-ink">{children}</body>
     </html>
   )

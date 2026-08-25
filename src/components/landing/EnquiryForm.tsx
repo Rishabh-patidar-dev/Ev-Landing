@@ -46,13 +46,13 @@ export function EnquiryForm() {
   }
 
   return (
-    <section id="enquiry" className="border-t border-ink/[0.06] bg-sand/10 py-20 sm:py-28">
+    <section id="enquiry" className="bg-sand/[0.06] py-20 sm:py-28">
       <div className="mx-auto grid max-w-5xl items-center gap-12 px-5 lg:grid-cols-2">
         <div>
-          <span className="font-mono text-xs uppercase tracking-widest text-slate">
-            Not ready to apply?
+          <span className="inline-flex items-center rounded-full bg-mint px-3.5 py-1.5 font-mono text-xs font-medium tracking-widest text-slate">
+            NOT READY TO APPLY?
           </span>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Talk to our network team
           </h2>
           <p className="mt-4 max-w-md text-base leading-relaxed text-ink/60">
@@ -68,10 +68,10 @@ export function EnquiryForm() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-ink/[0.08] bg-brand-white p-6 shadow-sm sm:p-8">
+        <div className="rounded-3xl border border-ink/[0.06] bg-brand-white p-6 shadow-[0_20px_50px_-24px_rgba(11,23,16,0.18)] sm:p-8">
           {done ? (
             <div className="flex flex-col items-center gap-4 py-8 text-center">
-              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-slate/10">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-mint">
                 <CheckCircle2 className="h-7 w-7 text-slate" />
               </span>
               <h3 className="text-xl font-semibold text-ink">Thanks — we’ve got it</h3>

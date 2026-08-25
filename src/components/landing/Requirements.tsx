@@ -45,10 +45,10 @@ export function Requirements() {
     <section id="requirements" className="bg-brand-white py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-5">
         <div className="mb-14 max-w-2xl">
-          <span className="font-mono text-xs uppercase tracking-widest text-slate">
-            Come prepared
+          <span className="inline-flex items-center rounded-full bg-mint px-3.5 py-1.5 font-mono text-xs font-medium tracking-widest text-slate">
+            COME PREPARED
           </span>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             What you’ll need along the way
           </h2>
           <p className="mt-4 text-base leading-relaxed text-ink/60">
@@ -59,7 +59,7 @@ export function Requirements() {
 
         <div className="grid gap-6 sm:grid-cols-2">
           {groups.map((g) => (
-            <div key={g.title} className="rounded-xl border border-ink/[0.08] bg-brand-white p-6">
+            <div key={g.title} className="rounded-2xl border border-ink/[0.07] bg-brand-white p-6 transition-colors hover:border-stone/25">
               <h3 className="mb-4 font-mono text-xs uppercase tracking-widest text-ink/50">
                 {g.title}
               </h3>

@@ -1,13 +1,13 @@
 export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
-import { Zap } from 'lucide-react'
+import Image from 'next/image'
 import { ApplicationWizard } from '@/components/apply/ApplicationWizard'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Apply for a dealership — Voltmark Dealers',
-  description: 'Submit your EV dealership application to the Voltmark network.',
+  title: 'Apply for a dealership — Luxus Green Onboarding Portal',
+  description: 'Submit your EV dealership application to the Luxus Green Mobility network.',
 }
 
 export default function ApplyPage() {
@@ -16,11 +16,11 @@ export default function ApplyPage() {
       <header className="border-b border-ink/[0.07] bg-brand-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-stone/25">
-              <Zap className="h-4 w-4 text-slate" />
+            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-white">
+              <Image src="/luxus-green-logo.webp" alt="Luxus Green Mobility" width={20} height={20} className="object-contain" />
             </span>
             <span className="text-sm font-semibold text-ink">
-              Voltmark <span className="text-slate">Dealers</span>
+              Luxus Green <span className="text-slate">Onboarding Portal</span>
             </span>
           </Link>
         </div>

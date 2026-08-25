@@ -1,20 +1,20 @@
 export const dynamic = 'force-dynamic'
 
-import { Zap } from 'lucide-react'
+import Image from 'next/image'
 import { LoginForm } from '@/components/auth/LoginForm'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = { title: 'Sign In — Voltmark Dealers' }
+export const metadata: Metadata = { title: 'Sign In — Luxus Green Onboarding Portal' }
 
 export default function LoginPage() {
   return (
     <div className="min-h-screen flex">
-      <div className="hidden lg:flex lg:w-1/2 border-r border-ink/[0.07] bg-sand/10 flex-col justify-between p-12">
+      <div className="hidden lg:flex lg:w-1/2 border-r border-ink/[0.07] bg-mint/50 flex-col justify-between p-12">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-stone/25 flex items-center justify-center">
-            <Zap className="w-4 h-4 text-slate" />
+          <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
+            <Image src="/luxus-green-logo.webp" alt="Luxus Green Mobility" width={20} height={20} className="object-contain" />
           </div>
-          <span className="text-ink font-semibold text-base">Voltmark Dealers</span>
+          <span className="text-ink font-semibold text-base">Luxus Green Onboarding Portal</span>
         </div>
 
         <div className="space-y-6">
@@ -34,16 +34,16 @@ export default function LoginPage() {
           <img src="/innovun-dark.png" alt="Innovun" className="h-4 w-auto opacity-70" />
           <p className="text-ink/40 text-xs">Powered By Innovun Global</p>
         </div>
-        <p className="text-ink/35 text-xs">© 2026 Voltmark</p>
+        <p className="text-ink/35 text-xs">© 2026 Luxus Green Mobility</p>
       </div>
 
       <div className="flex-1 flex items-center justify-center p-8 bg-brand-white">
         <div className="w-full max-w-sm">
           <div className="flex items-center gap-2 mb-8 lg:hidden">
-            <div className="w-7 h-7 rounded-md bg-slate/10 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-slate" />
+            <div className="w-7 h-7 rounded-md bg-mint flex items-center justify-center">
+              <Image src="/luxus-green-logo.webp" alt="Luxus Green Mobility" width={16} height={16} className="object-contain" />
             </div>
-            <span className="font-semibold text-ink text-sm">Voltmark Dealers</span>
+            <span className="font-semibold text-ink text-sm">Luxus Green Onboarding Portal</span>
           </div>
 
           <div className="mb-6">

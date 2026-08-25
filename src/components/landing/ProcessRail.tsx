@@ -6,10 +6,10 @@ export function ProcessRail() {
     <section id="process" className="bg-brand-white py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-5">
         <div className="mb-14 max-w-2xl">
-          <span className="font-mono text-xs uppercase tracking-widest text-slate">
-            The path to go-live
+          <span className="inline-flex items-center rounded-full bg-mint px-3.5 py-1.5 font-mono text-xs font-medium tracking-widest text-slate">
+            THE PATH TO GO-LIVE
           </span>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Five stages, one connected pipeline
           </h2>
           <p className="mt-4 text-base leading-relaxed text-ink/60">
@@ -33,13 +33,13 @@ export function ProcessRail() {
                 aria-hidden
                 className={[
                   'absolute left-0 top-0 z-10 hidden h-10 w-10 items-center justify-center rounded-full font-mono text-sm font-semibold sm:flex',
-                  i === 0 ? 'bg-stone text-ink' : 'border border-ink/12 bg-brand-white text-ink/50',
+                  i === 0 ? 'bg-stone text-white' : 'border border-ink/12 bg-brand-white text-ink/50',
                 ].join(' ')}
               >
                 {s.n}
               </span>
 
-              <div className="mb-6 rounded-xl border border-ink/[0.08] bg-brand-white p-6 shadow-sm transition-shadow hover:shadow-md">
+              <div className="mb-6 rounded-2xl border border-ink/[0.07] bg-brand-white p-6 transition-all hover:-translate-y-0.5 hover:border-stone/25 hover:shadow-[0_20px_40px_-24px_rgba(11,23,16,0.2)]">
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                   <span className="flex h-6 w-6 items-center justify-center rounded-md bg-ink font-mono text-xs text-brand-white sm:hidden">
                     {s.n}
@@ -69,8 +69,8 @@ export function ProcessRail() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1.5 rounded-lg border border-stone/40 bg-stone/[0.12] px-3 py-2 text-ink">
-                    <IndianRupee className="h-3.5 w-3.5 text-slate" />
+                  <div className="flex items-center gap-1.5 rounded-full bg-mint px-3.5 py-2 text-slate">
+                    <IndianRupee className="h-3.5 w-3.5" />
                     <span className="font-mono text-xs">{s.cost}</span>
                   </div>
                 </div>

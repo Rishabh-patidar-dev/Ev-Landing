@@ -1,20 +1,25 @@
-const stats = [
-  { value: '5', label: 'Stages, fully online' },
-  { value: '100%', label: 'Digital KYC & e-sign' },
-  { value: '3', label: 'City tiers supported' },
-  { value: '₹0', label: 'To create an account' },
+// Trust strip right under the hero — same layout slot the reference design
+// uses for client logos, adapted to something this business can honestly
+// claim: the regions the network is actively expanding into, not invented
+// client names or unverifiable numbers.
+const regions = [
+  'Madhya Pradesh', 'Rajasthan', 'Gujarat', 'Delhi NCR', 'Karnataka', 'Punjab',
 ]
 
 export function StatStrip() {
   return (
-    <section className="border-y border-ink/[0.07] bg-sand/10">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-px px-5 py-0 sm:grid-cols-4">
-        {stats.map((s) => (
-          <div key={s.label} className="px-2 py-7 text-center sm:px-4">
-            <p className="font-mono text-2xl font-semibold text-slate sm:text-3xl">{s.value}</p>
-            <p className="mt-1 text-xs text-ink/50">{s.label}</p>
-          </div>
-        ))}
+    <section className="px-5 pb-4 sm:pb-8">
+      <div className="mx-auto max-w-5xl rounded-3xl bg-sand/[0.06] px-6 py-6 sm:px-10">
+        <p className="mb-4 text-center font-mono text-[11px] uppercase tracking-widest text-ink/35">
+          Now onboarding dealers across
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+          {regions.map((r) => (
+            <span key={r} className="text-sm font-semibold text-ink/45 transition-colors hover:text-ink/70">
+              {r}
+            </span>
+          ))}
+        </div>
       </div>
     </section>
   )

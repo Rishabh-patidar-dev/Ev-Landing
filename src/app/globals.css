@@ -1,29 +1,34 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   Palette — deep indigo + teal, modern SaaS register (inspired by the
-   Synkro brand board: 60% white/light neutral, 30% deep indigo, 10% teal
-   accent). Token NAMES kept the same as the old muted earth palette
-   (ink/slate/stone/sand) on purpose — every component already reads colour
-   through these four variables, so swapping the values re-themes the whole
-   site without touching a single component file.
+   Palette — Luxus Green brand register (2026 redesign): a confident,
+   saturated green replaces the earlier indigo/teal SaaS look, matching the
+   accent green already shipped in the DMS dealer portal and the staff CRM
+   this season, so the three apps read as one product family. Token NAMES
+   kept the same (ink/slate/stone/sand/ink2/white) on purpose — every
+   component already reads colour through these variables, so swapping the
+   values re-themes the whole site without touching a single component file.
    --------------------------------------------------------------------------- */
 :root {
-  --ink: #0F1B3D;    /* Deep Indigo — headings, dark surfaces, primary text */
-  --slate: #0B7A78;  /* Deepened teal — links, icon glyphs, small accent text (AA on white; pure #009D9A reads ~3.3:1, too low for body-sized text) */
-  --stone: #009D9A;  /* Teal — primary buttons, badges, large accents */
-  --sand: #64748B;   /* Stone Grey — secondary/muted text, borders, tints */
-  --ink2: #0A1330;   /* Deeper indigo — darkest surfaces */
-  --white: #F7FAFC;  /* Soft White — page background */
+  --ink: #0B1710;     /* near-black warm green — headings, dark CTA banners, primary text */
+  --slate: #166534;   /* deep green — links, icon glyphs, small accent text (AA on white) */
+  --stone: #16A34A;   /* vivid green — primary buttons, badges, large accents (matches DMS/CRM accent) */
+  --stone-dark: #0F7A38; /* hover state for --stone */
+  --sand: #5B6B60;    /* muted sage-grey — secondary/muted text, borders, tints */
+  --ink2: #06110B;    /* deepest surface — darkest CTA banner gradient edge */
+  --white: #F8FAF8;   /* soft off-white — page background */
+  --mint: #E7F6EC;    /* pale green tint — eyebrow badges, icon chips, soft section backgrounds */
 }
 
 @theme inline {
   --color-ink: var(--ink);
   --color-slate: var(--slate);
   --color-stone: var(--stone);
+  --color-stone-dark: var(--stone-dark);
   --color-sand: var(--sand);
   --color-ink2: var(--ink2);
   --color-brand-white: var(--white);
+  --color-mint: var(--mint);
   --color-background: var(--ink2);
   --color-foreground: var(--white);
   --font-sans: var(--font-inter);
@@ -63,9 +68,22 @@ h1, h2, h3, h4, h5, h6 {
 }
 .reveal { animation: reveal-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .reveal-delay { animation-delay: 0.15s; }
+.reveal-delay-2 { animation-delay: 0.3s; }
+.reveal-delay-3 { animation-delay: 0.45s; }
+
+/* Gentle bob for the hero's floating badge chips — slow and small on
+   purpose, a "still alive" touch rather than motion that competes for
+   attention (same reasoning as .stage-pulse staying a static ring). */
+@keyframes float-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.float-bob { animation: float-bob 5s ease-in-out infinite; }
+.float-bob-delay { animation-delay: 1.2s; }
+.float-bob-delay-2 { animation-delay: 2.4s; }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal, .reveal-delay { animation: none !important; }
+  .reveal, .reveal-delay, .reveal-delay-2, .reveal-delay-3, .float-bob, .float-bob-delay, .float-bob-delay-2 { animation: none !important; }
 }
 
 /* Skeleton shimmer */
